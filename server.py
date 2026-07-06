@@ -37,6 +37,8 @@ _token = {"value": None}
 
 def _login():
     """Логіниться у vps_api, зберігає токен у пам'яті. Кидає виняток при невдачі."""
+    if not API_URL:
+        raise RuntimeError("Не задано VPS_API_URL у конфігу MCP")
     if not USERNAME or not PASSWORD:
         raise RuntimeError("Не задано VPS_USERNAME / VPS_PASSWORD у конфігу MCP")
     resp = httpx.post(
