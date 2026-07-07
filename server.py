@@ -111,7 +111,8 @@ def describe_object(object_type: str, object_name: str) -> dict:
 @mcp.tool()
 def list_queries(object_type: str, object_name: str) -> dict:
     """Наявні іменовані запити (.sel/.json), прив'язані до об'єкта 1С.
-    Повертає {total, queries:[{query_name, info, file, fields_count}]}."""
+    Повертає {total, queries:[{query_name, info, file, fields_count, mcp_allowed}]}.
+    mcp_allowed=true → цей запит можна виконати через run_query (інакше 403)."""
     return _call("/metadata/queries", {"object_type": object_type, "object_name": object_name})
 
 
@@ -138,7 +139,7 @@ def run_query(
     order: сортування по аліасах, напр. "name" або "name УБЫВ".
     offset/limit: посторінкова вибірка.
     Повертає {total, rows[], total_time}."""
-    payload = {"query": query_name, "offset": offset, "limit": limit}
+    payload = {"query": query_name, "offset": offset, "limit": limit, "mcp": True}
     if filters:
         payload["filters"] = filters
     if params:
